@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 from data_processor import DataProcessor
 from feature_engineer import FeatureEngineer
 from fraud_detector import FraudDetector
+from output_generator import OutputGenerator
 
 
 def load_config() -> dict:
@@ -80,16 +81,32 @@ Example:
         data_processor = DataProcessor()
         engineer = FeatureEngineer()
         detector = FraudDetector(config)
+        generator = OutputGenerator()
 
+        # Step 1: Load and preprocess data
         df = data_processor.load_transactions(args.input)
+
+        # Step 2: Engineer features
         df = engineer.engineer_features(df)
+
+        # Step 3: Detect fraud
         df = detector.detect_fraud(df)
+
+        # Step 4: Get statistics
         stats = detector.get_detection_stats(df)
-        print(df.head())
-        print(stats)
+
+        # Step 5: Generate output
+        generator.save_flagged_transactions(df, args.output, include_all=False)
+
+        # Step 6: Print summary
+        generator.print_summary(stats)
+
+        print(f"\nProcessing complete!")
 
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"\nError: {e}")
+        import traceback
+        traceback.print_exc()
         sys.exit(1)
 
 if __name__ == '__main__':

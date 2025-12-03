@@ -8,15 +8,8 @@ from typing import Dict
 
 
 class FraudDetector:
-    """Evaluates transactions against fraud detection rules."""
 
     def __init__(self, config: Dict):
-        """
-        Initialize fraud detector with configuration.
-
-        Args:
-            config: Dictionary with rule thresholds and weights
-        """
         self.config = config
 
     def detect_fraud(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -29,6 +22,7 @@ class FraudDetector:
         Returns:
             DataFrame with fraud flags and risk scores
         """
+
         print("Running fraud detection rules...")
 
         df = df.copy()
@@ -60,6 +54,7 @@ class FraudDetector:
         Rule 1: High-Velocity Transaction Burst
         Flag if ≥5 transactions within 10-minute window
         """
+
         threshold = self.config['rule1_velocity_threshold']
 
         df['rule1_triggered'] = (
@@ -78,6 +73,7 @@ class FraudDetector:
         Rule 2: Statistical Amount Anomaly
         Flag if amount > (user_mean + 3×std_dev) AND > $500
         """
+
         sigma_multiplier = self.config['rule2_sigma_multiplier']
         min_amount = self.config['rule2_min_amount']
 
@@ -102,6 +98,7 @@ class FraudDetector:
         Rule 3: Cumulative Spending Spike
         Flag if 24-hour sum > $5,000 OR > 10× user's daily average
         """
+        
         absolute_threshold = self.config['rule3_absolute_threshold']
         relative_multiplier = self.config['rule3_relative_multiplier']
 
@@ -124,7 +121,7 @@ class FraudDetector:
         Rule 4: First-Time Merchant + High Amount
         Flag if new merchant AND amount > $300 AND > 2× user average
         """
-        
+
         min_amount = self.config['rule4_min_amount']
         relative_multiplier = self.config['rule4_relative_multiplier']
 

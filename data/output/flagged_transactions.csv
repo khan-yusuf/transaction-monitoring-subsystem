@@ -1,0 +1,14 @@
+user_id,timestamp,merchant_name,amount,risk_score,triggered_rules,explanation
+user005,2024-01-06 04:20:00,luxury_watches_intl,3500.0,54.41,"Rule2:AmountAnomaly,Rule4:NewMerchant,Rule5:Nocturnal",Amount exceeds user pattern (>3 std dev); First-time merchant with high amount; High-value transaction during 2am-6am
+user001,2024-01-06 10:14:00,unknown_merchant5,395.0,41.18,"Rule1:Velocity,Rule4:NewMerchant",Multiple transactions in 10 minutes; First-time merchant with high amount
+user004,2024-01-06 14:00:00,apple_store,999.0,38.24,"Rule2:AmountAnomaly,Rule4:NewMerchant",Amount exceeds user pattern (>3 std dev); First-time merchant with high amount
+user003,2024-01-06 02:45:00,international_electronics,1250.0,33.82,"Rule4:NewMerchant,Rule5:Nocturnal",First-time merchant with high amount; High-value transaction during 2am-6am
+user003,2024-01-06 03:15:00,offshore_jewelry,890.0,33.82,"Rule4:NewMerchant,Rule5:Nocturnal",First-time merchant with high amount; High-value transaction during 2am-6am
+user001,2024-01-07 03:30:00,online_store_xyz,650.0,33.82,"Rule4:NewMerchant,Rule5:Nocturnal",First-time merchant with high amount; High-value transaction during 2am-6am
+user001,2024-01-06 10:05:00,unknown_merchant1,450.0,17.65,Rule4:NewMerchant,First-time merchant with high amount
+user001,2024-01-06 10:10:00,unknown_merchant3,520.0,17.65,Rule4:NewMerchant,First-time merchant with high amount
+user001,2024-01-06 10:12:00,unknown_merchant4,410.0,17.65,Rule4:NewMerchant,First-time merchant with high amount
+user002,2024-01-07 15:00:00,ikea,420.0,17.65,Rule4:NewMerchant,First-time merchant with high amount
+user002,2024-01-07 17:00:00,macys,380.0,17.65,Rule4:NewMerchant,First-time merchant with high amount
+user002,2024-01-07 19:00:00,nordstrom,510.0,17.65,Rule4:NewMerchant,First-time merchant with high amount
+user002,2024-01-07 21:00:00,saks,620.0,17.65,Rule4:NewMerchant,First-time merchant with high amount
