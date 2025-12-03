@@ -28,9 +28,15 @@ The higher risk number refers to the system's confidence in this transaction bei
    - Detects: Hour between 2am-6am AND amount > user's 75th percentile
    - Prevents: Automated fraud scripts, off-hours account takeover
 
+## Installation
+```zsh
+pip3 install -r requirements.txt
+```
+
 ## Usage
 
-```bash
+
+```zsh
 python3 main.py --input data/input/sample_transactions.csv --output data/output/flagged_transactions.csv
 ```
 
@@ -48,3 +54,41 @@ CSV file with original columns plus:
 - `risk_score`: Aggregate risk score (0-100)
 - `triggered_rules`: Comma-separated list of triggered rule names
 - `explanation`: Human-readable explanation of why flagged
+
+## Example Output
+
+Here's what the system detects from real transaction data:
+
+```csv
+user_id,timestamp,merchant_name,amount,risk_score,triggered_rules,explanation
+user005,2024-01-06 04:20:00,luxury_watches_intl,3500.0,54.41,"Rule2:AmountAnomaly,Rule4:NewMerchant,Rule5:Nocturnal",Amount exceeds user pattern (>3 std dev); First-time merchant with high amount; High-value transaction during 2am-6am
+user001,2024-01-06 10:14:00,unknown_merchant5,395.0,41.18,"Rule1:Velocity,Rule4:NewMerchant",Multiple transactions in 10 minutes; First-time merchant with high amount
+user004,2024-01-06 14:00:00,apple_store,999.0,38.24,"Rule2:AmountAnomaly,Rule4:NewMerchant",Amount exceeds user pattern (>3 std dev); First-time merchant with high amount
+user003,2024-01-06 02:45:00,international_electronics,1250.0,33.82,"Rule4:NewMerchant,Rule5:Nocturnal",First-time merchant with high amount; High-value transaction during 2am-6am
+```
+
+**Key Detection Examples:**
+- **Highest Risk (54.41)**: User005 made a $3,500 purchase at 4:20 AM from a new luxury watch merchant - triggering 3 rules
+- **Velocity Attack (41.18)**: User001 had multiple rapid transactions within 10 minutes at unknown merchants
+- **Nocturnal Fraud (33.82)**: Multiple users making high-value purchases between 2-6 AM from new merchants
+
+
+## Future Enhancements
+
+### 1. Machine Learning Integration
+- Train ensemble models (Random Forest, XGBoost, Neural Networks) on labeled transaction data
+- Combine rule-based + ML predictions for hybrid fraud detection
+- SHAP/LIME explainability for model transparency
+- Active learning pipeline with human-in-the-loop feedback
+
+### 2. Real-Time Processing & API
+- REST API for live transaction scoring
+- Stream processing with Kafka/Redis for sub-100ms latency
+- WebSocket alerts for immediate fraud notifications
+- Interactive dashboard with real-time metrics and visualizations
+
+### 3. Advanced Behavioral Analytics
+- Graph analysis to detect fraud rings and money mule networks
+- Impossible travel detection (geographic velocity checks)
+- Device fingerprinting and IP reputation scoring
+- Merchant category risk modeling and peer group analysis

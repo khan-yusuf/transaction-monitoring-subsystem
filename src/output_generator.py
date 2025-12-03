@@ -58,78 +58,6 @@ class OutputGenerator:
         print(f"Results saved to {output_path}")
 
 
-    def save_detection_report(
-        self,
-        df: pd.DataFrame,
-        stats: dict,
-        report_path: str
-    ) -> None:
-        """
-        Save a detailed detection report.
-
-        Args:
-            df: DataFrame with fraud detection results
-            stats: Dictionary with detection statistics
-            report_path: Path to save report file
-        """
-
-        with open(report_path, 'w') as f:
-            f.write("=" * 60 + "\n")
-            f.write("TRANSACTION FRAUD DETECTION REPORT\n")
-            f.write("=" * 60 + "\n\n")
-
-            # Overall statistics
-            f.write("OVERALL STATISTICS:\n")
-            f.write("-" * 60 + "\n")
-            f.write(f"Total Transactions:        {stats['total_transactions']:,}\n")
-            f.write(f"Flagged Transactions:      {stats['flagged_transactions']:,}\n")
-            f.write(f"Flagged Percentage:        {stats['flagged_percentage']:.2f}%\n")
-            f.write(f"Average Risk Score:        {stats['avg_risk_score']:.2f}\n")
-            f.write(f"Maximum Risk Score:        {stats['max_risk_score']:.2f}\n\n")
-
-            # Rule-specific statistics
-            f.write("RULE TRIGGER COUNTS:\n")
-            f.write("-" * 60 + "\n")
-            f.write(f"Rule 1 (Velocity):         {stats['rule1_triggers']:,}\n")
-            f.write(f"Rule 2 (Amount Anomaly):   {stats['rule2_triggers']:,}\n")
-            f.write(f"Rule 3 (Spending Spike):   {stats['rule3_triggers']:,}\n")
-            f.write(f"Rule 4 (New Merchant):     {stats['rule4_triggers']:,}\n")
-            f.write(f"Rule 5 (Nocturnal):        {stats['rule5_triggers']:,}\n\n")
-
-            # Top flagged users
-            if stats['flagged_transactions'] > 0:
-                f.write("TOP 10 USERS BY FLAGGED TRANSACTIONS:\n")
-                f.write("-" * 60 + "\n")
-                flagged_df = df[df['fraud_flag'] == 1]
-                top_users = flagged_df.groupby('user_id').agg({
-                    'fraud_flag': 'sum',
-                    'risk_score': 'mean'
-                }).sort_values('fraud_flag', ascending=False).head(10)
-
-                for user_id, row in top_users.iterrows():
-                    f.write(f"{user_id}: {int(row['fraud_flag'])} flagged transactions, ")
-                    f.write(f"avg risk score {row['risk_score']:.2f}\n")
-
-                f.write("\n")
-
-                # Risk score distribution
-                f.write("RISK SCORE DISTRIBUTION:\n")
-                f.write("-" * 60 + "\n")
-                risk_bins = [0, 30, 60, 80, 100]
-                risk_labels = ['Low (0-30)', 'Medium (31-60)', 'High (61-80)', 'Very High (81-100)']
-                flagged_df['risk_category'] = pd.cut(
-                    flagged_df['risk_score'],
-                    bins=risk_bins,
-                    labels=risk_labels,
-                    include_lowest=True
-                )
-                risk_dist = flagged_df['risk_category'].value_counts().sort_index()
-                for category, count in risk_dist.items():
-                    f.write(f"{category}: {count:,}\n")
-
-        print(f"Detection report saved to {report_path}")
-
-
     def print_summary(self, stats: dict) -> None:
         """
         Print a summary of detection results to console.
@@ -137,7 +65,7 @@ class OutputGenerator:
         Args:
             stats: Dictionary with detection statistics
         """
-        
+
         print("\n" + "=" * 60)
         print("FRAUD DETECTION SUMMARY")
         print("=" * 60)
