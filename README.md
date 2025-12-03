@@ -28,6 +28,11 @@ The higher risk number refers to the system's confidence in this transaction bei
    - Detects: Hour between 2am-6am AND amount > user's 75th percentile
    - Prevents: Automated fraud scripts, off-hours account takeover
 
+## Usage
+
+```bash
+python3 main.py --input data/input/sample_transactions.csv --output data/output/flagged_transactions.csv
+```
 
 ## Input Format
 
