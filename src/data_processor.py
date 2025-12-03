@@ -4,10 +4,7 @@ import pandas as pd
 class DataProcessor:
 
     REQUIRED_COLUMNS = ['user_id', 'timestamp', 'merchant_name', 'amount']
-
-    # @args: chunk_size: Number of rows to process at once for large files
-    def __init__(self, chunk_size: int = 100000):
-        self.chunk_size = chunk_size
+    
 
     # @args: filepath: Path to transaction CSV file
     # @returns: Preprocessed DataFrame with validated transactions

@@ -6,6 +6,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from data_processor import DataProcessor
+from feature_engineer import FeatureEngineer
 
 
 def main():
@@ -53,8 +54,12 @@ Example:
 
     try:
         data_processor = DataProcessor()
+        engineer = FeatureEngineer()
+
         df = data_processor.load_transactions(args.input)
+        df = engineer.engineer_features(df)
         print(df.head())
+
     except Exception as e:
         print(f"Error: {e}")
         sys.exit(1)
