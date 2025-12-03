@@ -1,12 +1,30 @@
 import argparse
+import yaml
 import sys
 import os
+from pathlib import Path
 
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from data_processor import DataProcessor
 from feature_engineer import FeatureEngineer
+from fraud_detector import FraudDetector
+
+
+def load_config() -> dict:
+    """
+    Load configuration from YAML file.
+
+    Returns:
+        Configuration dictionary or None if file doesn't exist
+    """
+
+    config_path = Path(__file__).parent / 'config' / 'rules_config.yaml'
+    if config_path.exists():
+        with open(config_path, 'r') as f:
+            return yaml.safe_load(f)
+    return None
 
 
 def main():
@@ -53,12 +71,22 @@ Example:
     print("=" * 60 + "\n")
 
     try:
+        config = load_config()
+        if not config:
+            print("Error: Configuration file not found at config/rules_config.yaml")
+            sys.exit(1)
+        print("Loaded configuration from file")
+
         data_processor = DataProcessor()
         engineer = FeatureEngineer()
+        detector = FraudDetector(config)
 
         df = data_processor.load_transactions(args.input)
         df = engineer.engineer_features(df)
+        df = detector.detect_fraud(df)
+        stats = detector.get_detection_stats(df)
         print(df.head())
+        print(stats)
 
     except Exception as e:
         print(f"Error: {e}")

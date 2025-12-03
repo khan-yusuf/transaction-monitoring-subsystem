@@ -1,0 +1,30 @@
+# Transaction Fraud Detection Rules Configuration
+
+# Rule 1: High-Velocity Transaction Burst
+# Detects: ≥5 transactions within 10-minute window
+rule1_velocity_threshold: 5          # Number of transactions
+rule1_weight: 80                     # Risk score weight (0-100)
+
+# Rule 2: Statistical Amount Anomaly
+# Detects: Unusually large transaction amounts
+rule2_sigma_multiplier: 3            # Number of standard deviations
+rule2_min_amount: 500                # Minimum amount in dollars
+rule2_weight: 70                     # Risk score weight (0-100)
+
+# Rule 3: Cumulative Spending Spike
+# Detects: 24-hour sum > $5,000 OR > 10× user's daily average
+rule3_absolute_threshold: 5000       # Dollar amount threshold
+rule3_relative_multiplier: 10        # Multiplier of user's daily average
+rule3_weight: 75                     # Risk score weight (0-100)
+
+# Rule 4: First-Time Merchant + High Amount
+# Detects: Large transaction with unfamiliar merchant
+rule4_min_amount: 300                # Minimum amount in dollars
+rule4_relative_multiplier: 2         # Multiplier of user's average transaction
+rule4_weight: 60                     # Risk score weight (0-100)
+
+# Rule 5: Nocturnal High-Value Transaction
+# Detects: Hour between 2am-6am AND amount > user's 75th percentile
+rule5_start_hour: 2                  # Start of nocturnal window (24-hour format)
+rule5_end_hour: 6                    # End of nocturnal window (24-hour format)
+rule5_weight: 55                     # Risk score weight (0-100)
