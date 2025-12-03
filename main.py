@@ -5,6 +5,8 @@ import os
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
+from data_processor import DataProcessor
+
 
 def main():
 
@@ -49,8 +51,13 @@ Example:
     print(f"Output: {args.output}")
     print("=" * 60 + "\n")
 
-    # TODO: continue with rest of the processing
-
+    try:
+        data_processor = DataProcessor()
+        df = data_processor.load_transactions(args.input)
+        print(df.head())
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
 
 if __name__ == '__main__':
     main()
